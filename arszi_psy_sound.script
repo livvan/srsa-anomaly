@@ -1,0 +1,251 @@
+--STRESS REACTIONS SOUND ADDON v0.0.00 -----------------------------------
+--code by livvan----------------------------------------------------------
+--------------------------------------------------------------------------
+
+--UTILITY VARIABLES-------------------------------------------------------
+local last_psy_health = 1
+local current_stagae = 0
+local audio_timer = 0
+local audio_cooldown = 0
+local audio_hallucination = nil
+
+--SETTINGS----------------------------------------------------------------
+--minimum and maximum cooldonw betwen plyaing a new soundclip, in milliseconds
+local audio_min_delay = 1000
+local audio_max_delay = 3000
+
+--SOUND DATA--------------------------------------------------------------
+--First index is phase, should be same number as in phase_bounds
+--second index is for a audiclip, can be any amount.
+--
+--["file"] - soundclip file location in gamedata/sounds folder and name
+----"arszi_psy\\pripyat_whispers_final" will lead to '..gamedata/sounds/arszi_psy/pripyat_whispers_final.ogg'
+--["length"] - soundclip length in milliseconds, used to calculate the delay.
+--["volume"] - volume, between 0.00 and 1.00
+
+--OUTDOOR SOUNDS----------------------------------------------------------
+local outdoor_sounds = {
+	[1] = {--first phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	},
+  [2] = {--second phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+  },
+  [3] = {--third phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	}
+}
+
+--UNDERGOUND SOUNDS-------------------------------------------------------
+local underground_sounds = {
+	[1] = {
+	[1] = {--first phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	},
+	},
+	[2] = {
+	[1] = {--first phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	},
+	[3] = {
+	[1] = {--first phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	}
+}
+
+--SHELTER SOUNDS----------------------------------------------------------
+local shelter_sounds = {
+	[1] = {--first phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	},
+  [2] = {--second phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+  },
+  [3] = {--third phase
+		[1] = {--first soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		},
+		[2] = {--second soundclip
+			["file"] = "arszi_psy\\pripyat_whispers_final",
+			["length"] = 128000,
+			["volume"] = 0.00
+		}
+		--etc
+	}
+}
+
+--INTESITY PHASES---------------------------------------------------------
+local phase_bounds = {}
+  phase_bounds[1] = .7
+  phase_bounds[2] = .5
+  phase_bounds[3] = .3
+
+
+--SUPPORTING FUNCTIONS----------------------------------------------------
+local function get_phase(psy_health)
+	local phase = 0
+	
+	for index, phase_bound in ipairs(phase_bounds) do
+		if psy_health <= phase_bound then phase = index end
+	end
+	
+	return phase
+end
+
+local function get_enviroment()
+	local outdoor = not GetEvent("underground")
+	local shelter = outdoor and GetEvent("current_safe_cover")
+	
+	if shelter then return "shelter"
+	elseif outdoor then retuen "outdoor"
+	else return "underground" end
+	
+	--failsafe so code will not brake in case of selection is bugged after some future changes
+	return "outdoor"
+end
+
+--MAIN CYCLE--------------------------------------------------------------
+function actor_on_update()
+	--gets current time in milliseconds
+	local current_time = game.get_game_time()
+	
+	if current_time >= audio_timer then
+		local psy_health = arszi_psy.get_psy_health()
+		
+		audio_timer, cooldown = update_audio_hallucination(psy_health)
+		audio_timer = audio_timer + current_time
+		cooldown = cooldown + current_time
+	end
+end
+
+function manage_audio_hallucinations(psy_health)
+	local phase = get_phase(psy_health)
+	local enviroment = get_enviroment()
+	local file = "no_sound"
+	local length = 0
+	local volume = 0
+	
+	--just in case
+	if audio_hallucination then audio_hallucination:stop() end
+	
+	if phase ~= 0 and enviroment then
+		if enviroment = "shelter" then
+			local random_index = random_number(1, #(shelter_sounds[phase]))
+			file = shelter_sounds[phase][random_index]["file"]
+			length = shelter_sounds[phase][random_index]["length"]
+			volume = shelter_sounds[phase][random_index]["volume"]
+		elseif enviroment = "underground" then
+			local random_index = random_number(1, #(underground_sounds[phase]))
+			
+			file = underground_sounds[phase][random_index]["file"]
+			length = underground_sounds[phase][random_index]["length"]
+			volume = underground_sounds[phase][random_index]["volume"]
+		elseif enviroment = "outdoor" then
+			local random_index = random_number(1, #(outdoor_sounds[phase]))
+			
+			file = outdoor_sounds[phase][random_index]["file"]
+			length = outdoor_sounds[phase][random_index]["length"]
+			volume = outdoor_sounds[phase][random_index]["volume"]
+		else
+			local random_index = random_number(1, #(outdoor_sounds[phase]))
+			
+			file = outdoor_sounds[phase][random_index]["file"]
+			length = outdoor_sounds[phase][random_index]["length"]
+			volume = outdoor_sounds[phase][random_index]["volume"]
+		end
+		
+		audio_hallucination sound_object( file )
+		audio_hallucination:play(db.actor, 0, sound_object.s2d)
+	end
+	
+
+	return length, random_number(audio_min_delay, audio_max_delay)
+end
+
+--SUPPORTING CODE---------------------------------------------------------
+function on_game_start()
+
+	RegisterScriptCallback("actor_on_update", actor_on_update)
+end
