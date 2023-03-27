@@ -5,7 +5,7 @@
 --UTILITY VARIABLES-------------------------------------------------------
 local last_psy_health = 1
 local current_stagae = 0
-local audio_timer = 0
+local audio_timer = nil
 local audio_cooldown = 0
 local audio_hallucination = nil
 
@@ -68,7 +68,6 @@ local outdoor_sounds = {
 
 --UNDERGOUND SOUNDS-------------------------------------------------------
 local underground_sounds = {
-	[1] = {
 	[1] = {--first phase
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
@@ -82,9 +81,7 @@ local underground_sounds = {
 		}
 		--etc
 	},
-	},
-	[2] = {
-	[1] = {--first phase
+	[2] = {--second phase
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
@@ -97,8 +94,7 @@ local underground_sounds = {
 		}
 		--etc
 	},
-	[3] = {
-	[1] = {--first phase
+	[3] = {--third phase
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
@@ -156,7 +152,7 @@ local shelter_sounds = {
 	}
 }
 
---INTESITY PHASES---------------------------------------------------------
+--INTENSITY PHASES--------------------------------------------------------
 local phase_bounds = {}
   phase_bounds[1] = .7
   phase_bounds[2] = .5
@@ -191,10 +187,10 @@ function actor_on_update()
 	--gets current time in milliseconds
 	local current_time = game.get_game_time()
 	
-	if current_time >= audio_timer then
+	if audio_timer and current_time >= audio_timer then
 		local psy_health = arszi_psy.get_psy_health()
 		
-		audio_timer, cooldown = update_audio_hallucination(psy_health)
+		audio_timer, cooldown = manage_audio_hallucinations(psy_health)
 		audio_timer = audio_timer + current_time
 		cooldown = cooldown + current_time
 	end
@@ -211,18 +207,18 @@ function manage_audio_hallucinations(psy_health)
 	if audio_hallucination then audio_hallucination:stop() end
 	
 	if phase ~= 0 and enviroment then
-		if enviroment = "shelter" then
+		if enviroment == "shelter" then
 			local random_index = random_number(1, #(shelter_sounds[phase]))
 			file = shelter_sounds[phase][random_index]["file"]
 			length = shelter_sounds[phase][random_index]["length"]
 			volume = shelter_sounds[phase][random_index]["volume"]
-		elseif enviroment = "underground" then
+		elseif enviroment == "underground" then
 			local random_index = random_number(1, #(underground_sounds[phase]))
 			
 			file = underground_sounds[phase][random_index]["file"]
 			length = underground_sounds[phase][random_index]["length"]
 			volume = underground_sounds[phase][random_index]["volume"]
-		elseif enviroment = "outdoor" then
+		elseif enviroment == "outdoor" then
 			local random_index = random_number(1, #(outdoor_sounds[phase]))
 			
 			file = outdoor_sounds[phase][random_index]["file"]
@@ -236,11 +232,11 @@ function manage_audio_hallucinations(psy_health)
 			volume = outdoor_sounds[phase][random_index]["volume"]
 		end
 		
-		audio_hallucination sound_object( file )
+		audio_hallucination = sound_object( file )
 		audio_hallucination:play(db.actor, 0, sound_object.s2d)
+		audio_hallucination.volume = volume
 	end
 	
-
 	return length, random_number(audio_min_delay, audio_max_delay)
 end
 
