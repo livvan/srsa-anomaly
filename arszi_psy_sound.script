@@ -21,7 +21,7 @@ local audio_max_delay = 3000
 --["file"] - soundclip file location in gamedata/sounds folder and name
 ----"arszi_psy\\pripyat_whispers_final" will lead to '..gamedata/sounds/arszi_psy/pripyat_whispers_final.ogg'
 --["length"] - soundclip length in milliseconds, used to calculate the delay.
---["volume"] - volume, between 0.00 and 1.00
+--["volume"] - volume, between 0 and 100
 
 --OUTDOOR SOUNDS----------------------------------------------------------
 local outdoor_sounds = {
@@ -29,12 +29,12 @@ local outdoor_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	},
@@ -42,12 +42,12 @@ local outdoor_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
   },
@@ -55,12 +55,12 @@ local outdoor_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	}
@@ -72,12 +72,12 @@ local underground_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	},
@@ -85,12 +85,12 @@ local underground_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	},
@@ -98,12 +98,12 @@ local underground_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	}
@@ -115,12 +115,12 @@ local shelter_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	},
@@ -128,12 +128,12 @@ local shelter_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
   },
@@ -141,12 +141,12 @@ local shelter_sounds = {
 		[1] = {--first soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		},
 		[2] = {--second soundclip
 			["file"] = "arszi_psy\\pripyat_whispers_final",
 			["length"] = 128000,
-			["volume"] = 0.00
+			["volume"] = 0
 		}
 		--etc
 	}
