@@ -1,20 +1,20 @@
---STRESS REACTIONS SOUND ADDON v0.0.00 -----------------------------------
---code by livvan----------------------------------------------------------
---------------------------------------------------------------------------
+--STRESS REACTIONS SOUND ADDON v0.1.00 -----------------------------------------
+--code by livvan----------------------------------------------------------------
+--------------------------------------------------------------------------------
 
---UTILITY VARIABLES-------------------------------------------------------
+--UTILITY VARIABLES-------------------------------------------------------------
 local last_psy_health = 1
 local current_stagae = 0
 local audio_timer = nil
 local audio_cooldown = 0
 local audio_hallucination = nil
 
---SETTINGS----------------------------------------------------------------
+--SETTINGS----------------------------------------------------------------------
 --minimum and maximum cooldonw betwen plyaing a new soundclip, in milliseconds
-local audio_min_delay = 1000
-local audio_max_delay = 3000
+local audio_min_delay = 2000
+local audio_max_delay = 10000
 
---SOUND DATA--------------------------------------------------------------
+--SOUND DATA--------------------------------------------------------------------
 --First index is phase, should be same number as in phase_bounds
 --second index is for a audiclip, can be any amount.
 --
@@ -23,143 +23,143 @@ local audio_max_delay = 3000
 --["length"] - soundclip length in milliseconds, used to calculate the delay.
 --["volume"] - volume, between 0 and 100
 
---OUTDOOR SOUNDS----------------------------------------------------------
+--OUTDOOR SOUNDS----------------------------------------------------------------
 local outdoor_sounds = {
 	[1] = {--first phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	},
   [2] = {--second phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
   },
   [3] = {--third phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	}
 }
 
---UNDERGOUND SOUNDS-------------------------------------------------------
+--UNDERGOUND SOUNDS-------------------------------------------------------------
 local underground_sounds = {
 	[1] = {--first phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	},
 	[2] = {--second phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	},
 	[3] = {--third phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	}
 }
 
---SHELTER SOUNDS----------------------------------------------------------
+--SHELTER SOUNDS----------------------------------------------------------------
 local shelter_sounds = {
 	[1] = {--first phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	},
   [2] = {--second phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
   },
   [3] = {--third phase
 		[1] = {--first soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		},
 		[2] = {--second soundclip
-			["file"] = "arszi_psy\\pripyat_whispers_final",
-			["length"] = 128000,
-			["volume"] = 0
+			["file"] = "sanity\\test",
+			["length"] = 231000,
+			["volume"] = 100
 		}
 		--etc
 	}
 }
 
---INTENSITY PHASES--------------------------------------------------------
+--INTENSITY PHASES--------------------------------------------------------------
 local phase_bounds = {}
   phase_bounds[1] = .7
   phase_bounds[2] = .5
   phase_bounds[3] = .3
 
 
---SUPPORTING FUNCTIONS----------------------------------------------------
+--SUPPORTING FUNCTIONS----------------------------------------------------------
 local function get_phase(psy_health)
 	local phase = 0
 	
@@ -170,31 +170,41 @@ local function get_phase(psy_health)
 	return phase
 end
 
+
 local function get_enviroment()
 	local outdoor = not GetEvent("underground")
 	local shelter = outdoor and GetEvent("current_safe_cover")
 	
 	if shelter then return "shelter"
-	elseif outdoor then retuen "outdoor"
+	elseif outdoor then return "outdoor"
 	else return "underground" end
 	
 	--failsafe so code will not brake in case of selection is bugged after some future changes
 	return "outdoor"
 end
 
---MAIN CYCLE--------------------------------------------------------------
-function actor_on_update()
+
+--MAIN CYCLE--------------------------------------------------------------------
+local function actor_on_update()
 	--gets current time in milliseconds
-	local current_time = game.get_game_time()
+	--local current_time = game.get_game_time()
+	local current_time = time_global()
 	
-	if audio_timer and current_time >= audio_timer then
+	if not audio_timer then audio_timer = current_time + random_number(audio_min_delay, audio_max_delay) end
+	
+	if arszi_psy and audio_timer and current_time >= audio_timer then
+		printdbg("psy sound update triggred")
 		local psy_health = arszi_psy.get_psy_health()
+		local length = 0
+		local cooldown = 0
 		
-		audio_timer, cooldown = manage_audio_hallucinations(psy_health)
-		audio_timer = audio_timer + current_time
-		cooldown = cooldown + current_time
+		length, cooldown = manage_audio_hallucinations(psy_health)
+		printdbg(string.format("audio hallucination length %d, cooldown %d", length, cooldown))
+		audio_timer = current_time + length + cooldown
+		printdbg(string.format("audio hallucination next trigger %d", audio_timer))
 	end
 end
+
 
 function manage_audio_hallucinations(psy_health)
 	local phase = get_phase(psy_health)
@@ -202,9 +212,13 @@ function manage_audio_hallucinations(psy_health)
 	local file = "no_sound"
 	local length = 0
 	local volume = 0
+	printdbg(string.format("psy sound eviroment %s, phase %d", enviroment, phase))
 	
 	--just in case
-	if audio_hallucination then audio_hallucination:stop() end
+	if audio_hallucination then
+		audio_hallucination:stop()
+		printdbg("current audio hallucination is stopped")
+	end
 	
 	if phase ~= 0 and enviroment then
 		if enviroment == "shelter" then
@@ -235,12 +249,15 @@ function manage_audio_hallucinations(psy_health)
 		audio_hallucination = sound_object( file )
 		audio_hallucination:play(db.actor, 0, sound_object.s2d)
 		audio_hallucination.volume = volume
+		
+		printdbg(string.format("file: %s, length: %d, volume: %d", file, length, volume))
 	end
 	
 	return length, random_number(audio_min_delay, audio_max_delay)
 end
 
---SUPPORTING CODE---------------------------------------------------------
+
+------------INITIALIZATION------------------------------------------------------
 function on_game_start()
 
 	RegisterScriptCallback("actor_on_update", actor_on_update)
